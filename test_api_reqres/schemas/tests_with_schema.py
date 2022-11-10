@@ -32,6 +32,7 @@ def test_create_user_schema():
     assert result.json() == S(create_user_schema)
 
 
+
 update_user_schema = Schema(
     {
         "name": str,
