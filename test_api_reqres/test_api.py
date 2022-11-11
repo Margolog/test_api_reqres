@@ -17,7 +17,6 @@ def test_create_user():
     assert isinstance(result.json()['id'], str)
 
 
-
 def test_update_user():
     name = 'Margo'
     job = 'Doctor'
