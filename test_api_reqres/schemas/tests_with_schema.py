@@ -1,9 +1,15 @@
 import requests
 from requests import Response
-from voluptuous import Schema, PREVENT_EXTRA, Any, Optional
+from voluptuous import Schema, PREVENT_EXTRA, Any, Optional, All, Length
 from pytest_voluptuous import S
 
-from utils.base_user import reqres_session
+
+Support = Schema(
+    {
+        "url": str,
+        "text": str
+    }
+)
 
 create_user_schema = Schema(
     {
@@ -35,20 +41,20 @@ update_user_patch_schema = Schema(
     },
     required=True
 )
-
-single_user_schema = Schema(
+Single_user = Schema(
     {
-        "data": {
             "id": int,
             "email": str,
             "first_name": str,
             "last_name": str,
             "avatar": str
-        },
-        "support": {
-            "url": str,
-            "text": str
-        }
+    })
+
+
+single_user_schema = Schema(
+    {
+        "data": Single_user,
+        "support": Support
     },
     required=True,
     extra=PREVENT_EXTRA
@@ -62,20 +68,15 @@ List_User = Schema(
         "last_name": str,
         "avatar": str
     })
-Support_User = Schema(
-    {
-        "url": str,
-        "text": str
-    }
-)
 
-list_user_schema = Schema({
-    "page": 2,
-    "per_page": 6,
-    "total": 12,
-    "total_pages": 2,
-    "data": [List_User],
-    "support": Support_User
-},
+list_user_schema = Schema(
+    {
+        "page": 2,
+        "per_page": 6,
+        "total": 12,
+        "total_pages": 2,
+        "data": All([List_User], Length(min=1)),
+        "support": Support
+    },
     required=True,
     extra=PREVENT_EXTRA)

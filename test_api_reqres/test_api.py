@@ -1,16 +1,12 @@
-import requests
-from pytest_voluptuous import S
-from requests import Response
-
 from test_api_reqres.schemas.tests_with_schema import *
-from utils.base_user import reqres_session
 
 
-def test_create_user():
+
+def test_create_user(reqres_session):
     name = 'Margo'
     job = 'QA'
 
-    result: Response = reqres_session().post(url='/api/users',
+    result: Response = reqres_session.post(url='/api/users',
                                              json={"name": name, "job": job})
 
     assert result.status_code == 201
@@ -20,12 +16,12 @@ def test_create_user():
     assert result.json() == S(create_user_schema)
 
 
-def test_update_user():
+def test_update_user(reqres_session):
     name = 'Margo'
     job = 'Doctor'
 
-    result: Response = reqres_session().put(url='/api/users/2',
-                                            json={"name": name, "job": job})
+    result: Response = reqres_session.put(url='/api/users/2',
+                                          json={"name": name, "job": job})
 
     assert result.status_code == 200
     assert result.json()['name'] == name
@@ -33,9 +29,9 @@ def test_update_user():
     assert result.json() == S(update_user_schema)
 
 
-def test_list_user():
-    result: Response = reqres_session().get(url='/api/users?page=2',
-                                            params={"page": 2})
+def test_list_user(reqres_session):
+    result: Response = reqres_session.get(url='/api/users?page=2',
+                                          params={"page": 2})
 
     assert result.status_code == 200
     assert result.json()['page'] == 2
@@ -43,11 +39,11 @@ def test_list_user():
     assert result.json() == S(list_user_schema)
 
 
-def test_update_user_patch():
-    name = "ivan"
+def test_update_user_patch(reqres_session):
+    name = "margo"
     job = "qa"
 
-    result: Response = reqres_session().patch(
+    result: Response = reqres_session.patch(
         url="/api/users/",
         params={"id": 3},
         json={"name": name, "job": job}
@@ -59,14 +55,14 @@ def test_update_user_patch():
     assert result.json() == S(update_user_patch_schema)
 
 
-def test_delete_user():
-    result = reqres_session().delete(url='/api/users/2')
+def test_delete_user(reqres_session):
+    result = reqres_session.delete(url='/api/users/2')
 
     assert result.status_code == 204
 
 
-def test_single_user():
-    result: Response = reqres_session().get(url='/api/users/2')
+def test_single_user(reqres_session):
+    result: Response = reqres_session.get(url='/api/users/2')
     assert result.status_code == 200
     assert result.json()["data"]
     assert result.json()["data"]["id"] == 2
