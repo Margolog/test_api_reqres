@@ -1,5 +1,4 @@
 import pytest
-
 from utils.base_user import BaseSession
 
 

@@ -28,7 +28,6 @@ def test_update_user(reqres_session):
     assert result.json()['job'] == job
     assert result.json() == S(update_user_schema)
 
-
 def test_list_user(reqres_session):
     result: Response = reqres_session.get(url='/api/users?page=2',
                                           params={"page": 2})

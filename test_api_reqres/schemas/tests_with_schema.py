@@ -1,8 +1,4 @@
-import requests
-from requests import Response
 from voluptuous import Schema, PREVENT_EXTRA, Any, Optional, All, Length
-from pytest_voluptuous import S
-
 
 Support = Schema(
     {
