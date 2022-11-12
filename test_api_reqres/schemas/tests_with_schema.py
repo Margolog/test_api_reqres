@@ -17,21 +17,6 @@ create_user_schema = Schema(
 
 )
 
-
-def test_create_user_schema():
-    name = 'Margo'
-    job = 'QA'
-
-    result: Response = reqres_session().post(url='/api/users',
-                                             json={"name": name, "job": job})
-
-    assert result.status_code == 201
-    assert result.json()['name'] == name
-    assert result.json()['job'] == job
-    assert isinstance(result.json()['id'], str)
-    assert result.json() == S(create_user_schema)
-
-
 update_user_schema = Schema(
     {
         "name": str,
@@ -42,44 +27,14 @@ update_user_schema = Schema(
     extra=PREVENT_EXTRA
 )
 
-
-def test_update_user_schema():
-    name = 'Margo'
-    job = 'Doctor'
-
-    result: Response = reqres_session().put(url='/api/users/2',
-                                            json={"name": name, "job": job})
-
-    assert result.status_code == 200
-    assert result.json()['name'] == name
-    assert result.json()['job'] == job
-    assert result.json() == S(update_user_schema)
-
 update_user_patch_schema = Schema(
-        {
-            "name": str,
-            "job": str,
-            "updatedAt": str,
-        },
-        required=True
-    )
-
-
-def test_update_user_patch():
-    name = "Margo"
-    job = "qa"
-
-    result: Response = reqres_session().patch(
-        url="/api/users/",
-        params={"id": 3},
-        json={"name": name, "job": job}
-    )
-
-    assert result.status_code == 200
-    assert result.json()['name'] == name
-    assert result.json()['job'] == job
-    assert result.json() == S(update_user_patch_schema)
-
+    {
+        "name": str,
+        "job": str,
+        "updatedAt": str,
+    },
+    required=True
+)
 
 single_user_schema = Schema(
     {
@@ -99,8 +54,28 @@ single_user_schema = Schema(
     extra=PREVENT_EXTRA
 )
 
+List_User = Schema(
+    {
+        "id": int,
+        "email": str,
+        "first_name": str,
+        "last_name": str,
+        "avatar": str
+    })
+Support_User = Schema(
+    {
+        "url": str,
+        "text": str
+    }
+)
 
-def test_single_user_schema():
-    result: Response = reqres_session().get(url='/api/users/2')
-    assert result.status_code == 200
-    assert result.json() == S(single_user_schema)
+list_user_schema = Schema({
+    "page": 2,
+    "per_page": 6,
+    "total": 12,
+    "total_pages": 2,
+    "data": [List_User],
+    "support": Support_User
+},
+    required=True,
+    extra=PREVENT_EXTRA)

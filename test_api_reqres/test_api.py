@@ -1,6 +1,8 @@
 import requests
+from pytest_voluptuous import S
 from requests import Response
 
+from test_api_reqres.schemas.tests_with_schema import *
 from utils.base_user import reqres_session
 
 
@@ -15,6 +17,7 @@ def test_create_user():
     assert result.json()['name'] == name
     assert result.json()['job'] == job
     assert isinstance(result.json()['id'], str)
+    assert result.json() == S(create_user_schema)
 
 
 def test_update_user():
@@ -27,6 +30,7 @@ def test_update_user():
     assert result.status_code == 200
     assert result.json()['name'] == name
     assert result.json()['job'] == job
+    assert result.json() == S(update_user_schema)
 
 
 def test_list_user():
@@ -36,6 +40,7 @@ def test_list_user():
     assert result.status_code == 200
     assert result.json()['page'] == 2
     assert len(result.json()['data']) != 0
+    assert result.json() == S(list_user_schema)
 
 
 def test_update_user_patch():
@@ -51,6 +56,7 @@ def test_update_user_patch():
     assert result.status_code == 200
     assert result.json()['name'] == name
     assert result.json()['job'] == job
+    assert result.json() == S(update_user_patch_schema)
 
 
 def test_delete_user():
@@ -64,3 +70,4 @@ def test_single_user():
     assert result.status_code == 200
     assert result.json()["data"]
     assert result.json()["data"]["id"] == 2
+    assert result.json() == S(single_user_schema)
