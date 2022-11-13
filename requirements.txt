@@ -1,6 +1,6 @@
 pytest
-
 requests~=2.28.1
 pytest-voluptuous
 voluptuous~=0.13.1
 allure-pytest
+curlify

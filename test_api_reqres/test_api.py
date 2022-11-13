@@ -1,5 +1,7 @@
-from test_api_reqres.schemas.tests_with_schema import *
+from requests import Response
 
+from test_api_reqres.schemas.tests_with_schema import *
+from pytest_voluptuous import S
 
 
 def test_create_user(reqres_session):
@@ -7,7 +9,7 @@ def test_create_user(reqres_session):
     job = 'QA'
 
     result: Response = reqres_session.post(url='/api/users',
-                                             json={"name": name, "job": job})
+                                           json={"name": name, "job": job})
 
     assert result.status_code == 201
     assert result.json()['name'] == name
@@ -27,6 +29,7 @@ def test_update_user(reqres_session):
     assert result.json()['name'] == name
     assert result.json()['job'] == job
     assert result.json() == S(update_user_schema)
+
 
 def test_list_user(reqres_session):
     result: Response = reqres_session.get(url='/api/users?page=2',
